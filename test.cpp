@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <sys/timeb.h>
 using namespace std;
 
 int main()
