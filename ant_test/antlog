@@ -1,0 +1,21 @@
+Buildfile: C:\Users\Playdom BD1\Desktop\ant_test\build.xml
+
+clean:
+   [delete] Deleting directory C:\Users\Playdom BD1\Desktop\ant_test\build
+
+compile:
+    [mkdir] Created dir: C:\Users\Playdom BD1\Desktop\ant_test\build\classes
+    [javac] C:\Users\Playdom BD1\Desktop\ant_test\build.xml:19: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 1 source file to C:\Users\Playdom BD1\Desktop\ant_test\build\classes
+
+jar:
+    [mkdir] Created dir: C:\Users\Playdom BD1\Desktop\ant_test\build\jar
+      [jar] Building jar: C:\Users\Playdom BD1\Desktop\ant_test\build\jar\HelloWorld.jar
+
+run:
+     [java] Hello World
+
+main:
+
+BUILD SUCCESSFUL
+Total time: 1 second
