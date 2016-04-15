@@ -7,6 +7,6 @@ using namespace std;
 
 int main()
 {
-    printf("Hello Bloody World\n");
+    printf("Hello World\n");
     return 0;
 }
