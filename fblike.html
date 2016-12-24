@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+  <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        var appID = "YOUR APP ID HERE";
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=" + appID;
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+
+
+      var fbid = "";
+      var likeData = [];
+      
+
+      
+
+      function genDataHandler(datasource, sourcename, cb) {
+        function dataHandler(response){
+
+          if(response && !response.error) {
+            /* handle the result */
+            datasource = datasource.concat(response.data);
+            // console.log('Got user likes: ' + response.data.length);
+          }
+
+          if(response && response.paging.next != undefined){
+            FB.api(response.paging.next, dataHandler);
+          } else {
+            console.log("total " + sourcename + " data: " + datasource.length);
+            if (cb) cb(datasource);
+          }
+        }
+
+        return dataHandler;
+      }
+
+
+
+      function createLikeButton(id) {
+
+        var fblike = document.getElementById("fblike");
+        var likebutton = fblike.cloneNode(true);
+        likebutton.id = "id";
+
+        var att_href = document.createAttribute("data-href");       // Create a "class" attribute
+        att_href.value = "https://www.facebook.com/" + id + "/";
+
+        likebutton.setAttributeNode(att_href);
+
+        return likebutton;
+      }
+
+
+
+      function getUserLikes(userid) {
+
+        FB.api("/" + userid + "/likes", genDataHandler(likeData, "like", function(likedataArray){
+          // console.log("likedata array length: " + likedataArray.length);
+          likeData = likedataArray;
+
+          var liketable = document.getElementById("liketable");
+
+          for (var i in likeData) {
+            // console.log(likeData[i].name);
+            
+            // Create an empty <tr> element and add it to the 1st position of the table:
+            var row = liketable.insertRow(0);
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var cell1 = row.insertCell(0);
+            // var cell2 = row.insertCell(1);
+
+            var a = document.createElement('a');
+            var linkText = document.createTextNode(likeData[i].name);
+            a.appendChild(linkText);
+            a.title = "my title text";
+            a.href = "https://www.facebook.com/" + likeData[i].id;
+
+            cell1.appendChild(a);
+          }
+        }));
+      }
+
+
+      function fblogin() {
+        // console.log("Login to fb: original");
+        document.getElementById("login1").disabled = true;
+
+        FB.login(function(response) {
+            if (response.authResponse) {
+
+              console.log('Welcome!  Fetching your information.... ');
+
+              FB.api('/me', function(response) {
+                console.log('Good to see you, ' + response.name + '.');
+
+                fbid = response.id;
+
+                getUserLikes(fbid);
+
+             });
+
+            } else {
+              console.log('User cancelled login or did not fully authorize.');
+            }
+        }, {scope: 'email, user_likes'});
+      }
+
+    </script>
+
+    <h2>FB User likes</h2>
+
+    <!-- <input type="button" value="Login to original account" action="fblogin()"/> -->
+    <button id="login1" onclick="fblogin()">Login to account</button>
+
+    <br/>
+    <br/>
+
+    <div id="testdiv">
+
+      <!-- <div id="fblike" class="fb-like" data-href="https://www.facebook.com/iclr.cc/" data-width="300" data-layout="button" data-action="like" data-size="small" data-show-faces="true" data-share="false"></div> -->
+
+    </div>
+
+    <table id="liketable"></table>
+
+    
+
+  </body>
+</html>
